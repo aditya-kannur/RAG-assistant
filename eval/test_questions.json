@@ -1,0 +1,22 @@
+[
+  {
+    "question": "I am a small farmer with 1.5 hectares of land, am I eligible for PM-KISAN?",
+    "ground_truth": "Yes, small and marginal farmers owning cultivable land up to 2 hectares are eligible for PM-KISAN."
+  },
+  {
+    "question": "What is the annual benefit amount under PM-KISAN?",
+    "ground_truth": "Rs. 6,000 per year, paid in three equal installments of Rs. 2,000 each."
+  },
+  {
+    "question": "Can I get a scheme for starting a small business?",
+    "ground_truth": "None of the covered schemes (PM-KISAN, PM-JAY, PMAY-Urban, PM-KMY) provide business startup support."
+  },
+  {
+    "question": "What is the health insurance coverage amount under Ayushman Bharat PM-JAY?",
+    "ground_truth": "Rs. 5 lakh per family per year for secondary and tertiary care hospitalization."
+  },
+  {
+    "question": "Am I eligible for PMAY-Urban if my annual household income is 20 lakh?",
+    "ground_truth": "No, PMAY-Urban has income-based eligibility caps that exclude high-income households."
+  }
+]
