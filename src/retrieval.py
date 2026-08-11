@@ -5,16 +5,24 @@ from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 from langchain.retrievers.document_compressors import CrossEncoderReranker
 
 
-def build_hybrid_retriever(vectorstore, chunks, k=15):
-    """Combines dense (Chroma) + sparse (BM25) retrieval via weighted ensemble."""
-    dense_retriever = vectorstore.as_retriever(search_kwargs={"k": k})
+def build_hybrid_retriever(vectorstore, chunks, k=15, scheme_filter: str | None = None):
+    search_kwargs = {"k": k}
+    if scheme_filter:
+        search_kwargs["filter"] = {"scheme_name": scheme_filter}
 
-    bm25_retriever = BM25Retriever.from_documents(chunks)
+    dense_retriever = vectorstore.as_retriever(search_kwargs=search_kwargs)
+
+    # BM25 filtering by metadata isn't built-in — filter chunks manually first if scheme_filter set
+    bm25_chunks = chunks
+    if scheme_filter:
+        bm25_chunks = [c for c in chunks if c.metadata.get("scheme_name") == scheme_filter]
+
+    bm25_retriever = BM25Retriever.from_documents(bm25_chunks)
     bm25_retriever.k = k
 
     hybrid_retriever = EnsembleRetriever(
         retrievers=[dense_retriever, bm25_retriever],
-        weights=[0.5, 0.5],  # tune later based on eval results
+        weights=[0.5, 0.5],
     )
     return hybrid_retriever
 
