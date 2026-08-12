@@ -51,11 +51,3 @@ def load_and_chunk_pdfs(raw_pdf_dir: Path = RAW_PDF_DIR):
 
     print(f"\nTotal chunks: {len(all_chunks)}")
     return all_chunks
-
-
-if __name__ == "__main__":
-    chunks = load_and_chunk_pdfs()
-    # quick sanity check — print first chunk
-    print("\n--- Sample chunk ---")
-    print(chunks[0].page_content[:300])
-    print(chunks[0].metadata)

@@ -2,7 +2,7 @@ import streamlit as st
 from src.ingestion import load_and_chunk_pdfs
 from src.indexing import build_vector_store
 from src.generation import get_llm
-from src.pipeline import answer_question
+from src.pipeline import build_pipeline, answer_question
 
 st.set_page_config(page_title="Scheme Eligibility Assistant", page_icon="🏛️")
 
@@ -14,14 +14,10 @@ st.caption(
 
 
 @st.cache_resource(show_spinner="Loading scheme documents and models (first run only)...")
-def load_pipeline():
-    chunks = load_and_chunk_pdfs()
-    vectorstore = build_vector_store(chunks)
-    llm = get_llm()
-    return vectorstore, chunks, llm
+def cached_pipeline():
+    return build_pipeline()
 
-
-vectorstore, chunks, llm = load_pipeline()
+vectorstore, chunks, llm = cached_pipeline()
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
