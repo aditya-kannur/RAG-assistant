@@ -37,22 +37,3 @@ def build_reranked_retriever(hybrid_retriever, top_n=5):
         base_retriever=hybrid_retriever,
     )
     return reranked_retriever
-
-
-
-
-if __name__ == "__main__":
-    from src.ingestion import load_and_chunk_pdfs
-    from src.indexing import build_vector_store
-
-    chunks = load_and_chunk_pdfs()
-    vectorstore = build_vector_store(chunks)
-    hybrid = build_hybrid_retriever(vectorstore, chunks)
-    reranked = build_reranked_retriever(hybrid)
-
-    query = "I am a farmer with 2 acres of land, am I eligible for any scheme?"
-    results = reranked.invoke(query)
-
-    for i, doc in enumerate(results):
-        print(f"\n--- Result {i+1} ({doc.metadata.get('scheme_name')}) ---")
-        print(doc.page_content[:300])

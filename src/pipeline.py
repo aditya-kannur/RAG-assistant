@@ -9,10 +9,8 @@ from src.query_construction import extract_scheme_filter
 def build_pipeline():
     chunks = load_and_chunk_pdfs()
     vectorstore = build_vector_store(chunks)
-    hybrid = build_hybrid_retriever(vectorstore, chunks)
-    reranked_retriever = build_reranked_retriever(hybrid)
     llm = get_llm()
-    return reranked_retriever, llm
+    return vectorstore, chunks, llm 
 
 
 def answer_question(question: str, vectorstore, chunks, llm):
@@ -35,15 +33,3 @@ def answer_question(question: str, vectorstore, chunks, llm):
 
     answer = generate_answer(question, all_docs, llm)
     return answer, all_docs, scheme_filter
-
-if __name__ == "__main__":
-    retriever, llm = build_pipeline()
-
-    query = "I am a farmer with 2 acres of land, am I eligible for any scheme?"
-    answer, docs = answer_question(query, retriever, llm)
-
-    print("\n=== ANSWER ===")
-    print(answer)
-    print(f"\n=== SOURCES USED ({len(docs)} chunks) ===")
-    for doc in docs:
-        print(f"- {doc.metadata.get('scheme_name')} (page {doc.metadata.get('page')})")
