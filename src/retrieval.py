@@ -29,7 +29,7 @@ def build_hybrid_retriever(vectorstore, chunks, k=15, scheme_filter: str | None 
 
 def build_reranked_retriever(hybrid_retriever, top_n=5):
     """Wraps the hybrid retriever with a cross-encoder reranker, keeping top_n."""
-    cross_encoder = HuggingFaceCrossEncoder(model_name="cross-encoder/ms-marco-MiniLM-L-6-v2")
+    cross_encoder = HuggingFaceCrossEncoder(model_name="cross-encoder/ms-marco-MiniLM-L-4-v2")
     reranker = CrossEncoderReranker(model=cross_encoder, top_n=top_n)
 
     reranked_retriever = ContextualCompressionRetriever(
